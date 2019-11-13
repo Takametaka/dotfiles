@@ -1,0 +1,24 @@
+#!/bin/sh
+
+if [ $button -eq 1 ] 
+then
+    notify-send "5 most heavy on CPU :" "`ps awhcx --sort=-pcpu | sed -e 's/[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*//' | uniq | head -n 5 `"
+fi
+
+
+line=$(sensors | sed /Core/\!d | cut -c 16- | sed "s/[+-]\?\([0-9][0-9]\?[0-9]\?\).[0-9].*/\1/")
+
+val1=$(echo $line | sed -e "s/\([^\ ]*\)[\ ]*[^\ ]*[\ ]*/\1/")
+val2=$(echo $line | sed -e "s/[^\ ]*[\ ]*\([^\ ]*\)[\ ]*/\1/")
+
+#full text
+echo "Cpu : $val1°C $val2°C"
+#short text
+echo "Cpu $val1 $val2"
+#color
+if [ $val1 -gt 75 -o $val2 -gt 75 ] 
+then
+    echo "#FF2222"
+else
+    echo "#FFFFFF"
+#background

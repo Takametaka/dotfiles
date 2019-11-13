@@ -1,0 +1,27 @@
+#!/bin/sh
+
+
+sda1tot=`df -BM | sed -e /dev\\\/sda1/\!d -e "s/[^\ ]*[\ ]*\([^\ ]*\).*/\1/"`
+sda1use=`df -BM | sed -e /dev\\\/sda1/\!d -e "s/[^\ ]*[\ ]*[^\ ]*[\ ]*\([^\ ]*\).*/\1/"`
+sda1fre=`df -BM | sed -e /dev\\\/sda1/\!d -e "s/[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*\([^\ ]*\).*/\1/"`
+sda1per=`df -BM | sed -e /dev\\\/sda1/\!d -e "s/[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*\([^\ ]*\).*/\1/"`
+
+sda3tot=`df -BM | sed -e /dev\\\/sda3/\!d -e "s/[^\ ]*[\ ]*\([^\ ]*\).*/\1/"`
+sda3use=`df -BM | sed -e /dev\\\/sda3/\!d -e "s/[^\ ]*[\ ]*[^\ ]*[\ ]*\([^\ ]*\).*/\1/"`
+sda3fre=`df -BM | sed -e /dev\\\/sda3/\!d -e "s/[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*\([^\ ]*\).*/\1/"`
+sda3per=`df -BM | sed -e /dev\\\/sda3/\!d -e "s/[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*\([^\ ]*\).*/\1/"`
+
+if [ $button -eq 1 ] 
+then
+    line1=$(echo -e " /\t$sda1use\t$sda1fre\t$sda1tot")
+    line2=$(echo -e " /home\t$sda3use\t$sda3fre\t$sda3tot")
+    notify-send  "$(echo -e "File\tUsed\tFree\tTotal")" "$line1 \n$line2"
+fi
+
+#full text
+echo "Disk : $sda1per (/) - $sda3per (/home)"
+#short text
+echo "Dd : $sda1per $sda3per"
+#color
+echo "#FFFFFF"
+#background

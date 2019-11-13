@@ -1,0 +1,24 @@
+#!/bin/sh
+
+if [ $button -eq 1 ] 
+then
+    notify-send "5 most heavy on Mem :" "`ps awhcx --sort=-pmem | sed -e 's/[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*[\ ]*[^\ ]*//' | uniq | head -n 5`"
+fi
+
+val1=$(free -m | sed -e 2\!d -e "s/[^\ ]*[\ ]*\([^\ ]*\)[\ ]*[^\ ]*[\ ]*.*/\1/")
+val2=$(free -m | sed -e 2\!d -e "s/[^\ ]*[\ ]*[^\ ]*[\ ]*\([^\ ]*\)[\ ]*.*/\1/")
+
+#full text
+echo "Mem : ${val2}/${val1} M ($[${val2}*100 / ${val1}]%)"
+#short text
+echo "Mem : $[${val2}*100 / ${val1}]%"
+#color
+if [ $[${val2}*100 / ${val1}] -ge 60 -a $[${val2}*100 / ${val1}] -lt 80 ]
+then
+    echo "#FF6622"
+fi 
+if [ $[${val2}*100 / ${val1}] -gt 80 ]
+then
+    echo "#FF2222"
+fi
+#background

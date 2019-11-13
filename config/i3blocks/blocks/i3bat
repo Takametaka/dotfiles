@@ -1,0 +1,47 @@
+#!/bin/sh
+
+if [ $button -eq 1 ] 
+then
+    notify-send "About Battery : " "$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep -E "percentage|capacity|time\ to" | sed -e "s/[\ ]*\(.*\)/ \1/")"
+fi
+
+chr=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | sed -e /state/\!d -e "s/[\ ]*[^\ ]*[\ ]*\([^\ ]*\)/\1/")
+
+val=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | sed -e /percentage/\!d -e "s/[\ ]*[^\ ]*[\ ]*\([^\ ]*\)\%.*/\1/")
+
+# full text
+echo -n "|"
+for i in {1..10}; do
+    if [ ${val} -lt $[ 100 - $i*10 ] ] 
+    then
+        echo -n "-"
+    else
+        echo -n "#"
+    fi
+done
+echo -n "| ${val}%"
+
+if [ $chr == charging ]
+then
+    echo -n " 🔌"
+fi
+
+echo
+#end full text
+
+# short text
+echo "Bat ${val}%"
+# color
+if [ $val -gt 30 ]
+then
+    echo "#22FF22"
+fi
+if [ $val -le 30 -a $val -gt 15 ]
+then
+    echo "#FF6622"
+fi
+if [ $val -le 15 ]
+then
+    echo "#FF2200"
+fi
+#background

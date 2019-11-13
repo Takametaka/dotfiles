@@ -66,5 +66,4 @@ augroup sourcing
 
 augroup END
 
-ab #i #include
-ab #d #define
+let g:clang_library_path='/usr/lib64/libclang.so.9'
